@@ -1,15 +1,11 @@
 FROM php:7.4-fpm
 
 RUN apt-get update && apt-get -y install \
-        git g++ libcurl4-gnutls-dev libicu-dev libmcrypt-dev libpq-dev libxml2-dev unzip zlib1g-dev libonig-dev \
+        git g++ libcurl4-gnutls-dev libicu-dev libmcrypt-dev libpq-dev libxml2-dev unzip zlib1g-dev libonig-dev\
     && git clone https://github.com/phpredis/phpredis.git /usr/src/php/ext/redis \
-    && pecl install mcrypt && docker-php-ext-enable mcrypt && docker-php-ext-install curl intl mbstring json pdo pdo_pgsql redis xml \
+    && pecl install mcrypt && docker-php-ext-enable mcrypt && docker-php-ext-install curl intl mbstring json pdo pdo_pgsql redis xml tokenizer mysqli pdo_mysql\
     && apt-get autoremove -y && apt-get autoclean -y \
     && rm -rf /var/lib/apt/lists/*
-
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
-
-RUN curl -sSL https://phar.phpunit.de/phpunit.phar -o /usr/bin/phpunit && chmod +x /usr/bin/phpunit
 
 RUN echo 'date.timezone="Europe/Madrid"' >>  /usr/local/etc/php/conf.d/date.ini
 RUN echo 'session.save_path = "/tmp"' >>  /usr/local/etc/php/conf.d/session.ini
